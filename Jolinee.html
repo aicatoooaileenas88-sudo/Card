@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Happy 11th Birthday 🎉</title>
+  <style>
+    /* Reset / base */
+    :root{
+      --bg:#0f1724;
+      --card:#0b1220;
+      --accent:#ffb86b;
+      --text:#f8fafc;
+      --muted:#9aa4b2;
+      --glass: rgba(255,255,255,0.04);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:
+        radial-gradient(1200px 600px at 10% 10%, rgba(255,136,102,0.06), transparent 10%),
+        radial-gradient(1000px 400px at 90% 90%, rgba(102,153,255,0.03), transparent 12%),
+        var(--bg);
+      color:var(--text);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* Card */
+    .card{
+      width: 100%;
+      max-width:720px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:18px;
+      box-shadow: 0 10px 40px rgba(2,6,23,0.7);
+      padding:28px;
+      border: 1px solid rgba(255,255,255,0.03);
+      position:relative;
+      overflow:hidden;
+    }
+
+    header{
+      display:flex;
+      gap:16px;
+      align-items:center;
+    }
+    .badge{
+      width:86px;
+      height:86px;
+      border-radius:16px;
+      background:linear-gradient(135deg, #ffd89b, #ff6b6b);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:800;
+      font-size:26px;
+      color:#2b0f05;
+      box-shadow: 0 6px 20px rgba(255,107,107,0.12);
+      transform:rotate(-9deg);
+    }
+
+    h1{
+      font-size:20px;
+      margin:0;
+      line-height:1.05;
+    }
+    p.lead{
+      margin:4px 0 0 0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .scene{
+      margin-top:20px;
+      display:grid;
+      grid-template-columns: 1fr auto;
+      gap:18px;
+      align-items:start;
+    }
+
+    .message{
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      padding:18px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,0.02);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .message .rhyme{
+      font-size:16px;
+      line-height:1.45;
+      letter-spacing:0.2px;
+      white-space:pre-wrap;
+    }
+
+    .message .p-small{
+      margin-top:12px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    /* animated sparkle */
+    .sparkle{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      opacity:0.95;
+    }
+
+    /* right column controls */
+    .controls{
+      width:220px;
+      min-width:180px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      align-items:stretch;
+    }
+
+    .play-btn{
+      background:linear-gradient(135deg,#7ef9a6,#4ecdc4);
+      border-radius:12px;
+      padding:14px;
+      text-align:center;
+      font-weight:700;
+      color:#052018;
+      cursor:pointer;
+      user-select:none;
+      box-shadow:0 8px 30px rgba(78,205,196,0.12);
+    }
+    .play-btn:active{transform:translateY(1px)}
+
+    .small{
+      background:var(--glass);
+      padding:10px 12px;
+      border-radius:10px;
+      color:var(--muted);
+      font-size:13px;
+      text-align:center;
+    }
+
+    footer{
+      margin-top:18px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+    }
+
+    .qr-suggest{
+      background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      padding:8px 10px;
+      border-radius:10px;
+      font-size:13px;
+      color:var(--muted);
+      border:1px solid rgba(255,255,255,0.02);
+    }
+
+    /* confetti canvas */
+    #confetti {
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index:8;
+    }
+
+    /* intro animation */
+    .card.enter {
+      animation: pop 700ms cubic-bezier(.2,.9,.3,1);
+    }
+    @keyframes pop {
+      from { transform: translateY(12px) scale(.995); opacity:0 }
+      to { transform: translateY(0) scale(1); opacity:1 }
+    }
+
+    /* floating emoji */
+    .emoji-float{
+      position:absolute;
+      right:18px;
+      top:-22px;
+      font-size:44px;
+      transform-origin:center;
+      animation: floaty 4s ease-in-out infinite;
+      z-index:6;
+    }
+    @keyframes floaty{
+      0%{ transform:translateY(0) rotate(-6deg) }
+      50%{ transform:translateY(10px) rotate(6deg) }
+      100%{ transform:translateY(0) rotate(-6deg) }
+    }
+
+    /* small responsive */
+    @media (max-width:640px){
+      .scene{ grid-template-columns: 1fr; }
+      .controls{ width:100%; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti"></canvas>
+
+  <div class="card enter" id="card">
+    <div class="emoji-float">🎉</div>
+
+    <header>
+      <div class="badge">11</div>
+      <div>
+        <h1>HAPPY 11th BIRTHDAY!</h1>
+        <p class="lead">A secret surprise — scan the QR, press play, and enjoy 🎁</p>
+      </div>
+    </header>
+
+    <div class="scene">
+      <div class="message">
+        <div class="sparkle" aria-hidden="true"></div>
+
+        <!-- EDIT THIS: replace NAME and tweak lines as you like -->
+        <div class="rhyme" id="rhymeText">
+🎈 Halo meme jolinee , happy Birthdayy 🎈
+
+hai meimei haappy birthday yaaaa
+jgn bandel bandel 
+tetep jadi meme yg ceria ya jgn nangis trss
+cecenya itu didengerin jangan disepelein sapa tau butuh 
+
+Cie udh 11 aja nih ga kerasa 
+Takira masih 9 wkwkwwkww
+Happy birthday ya mee 
+Semoga happy trs jgn tengkar ae sm ccmu 
+
+Yareuuu 
+Semoga suka kadonya ya me 🎁
+itu dari cece koko 
+Love meme ❤️
+        </div>
+        <div class="p-small">Tip: If the music doesn't start automatically, press PLAY.</div>
+      </div>
+
+      <div class="controls">
+        <div class="play-btn" id="playBtn">▶️ Play Surprise</div>
+
+        <div class="small" id="status">Ready to play. Tap to start the party!</div>
+
+        <div class="small qr-suggest">
+          After uploading this file, make a QR code for the page URL and paste it on a card.
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="small">Made with love 💛</div>
+      <div class="small">Scannable link → use a QR code</div>
+    </footer>
+  </div>
+
+  <!-- optional audio: put a file named "birthday-melody.mp3" next to index.html
+       or edit the source to point to an online mp3 -->
+  <audio id="bgAudio" src="https://n.uguu.se/VPbPinYa.mp3" preload="auto"></audio>
+
+  <script>
+    /* -----------------------
+       Personalization helper
+       ----------------------- */
+    // If you want to programmatically replace [COUSIN NAME], edit here:
+    (function personalize(){
+      const name = "Joline"; // <-- put cousin's name here, e.g. "Luna"
+      if(name){
+        const el = document.getElementById('rhymeText');
+        el.innerText = el.innerText.replace(/\[COUSIN NAME\]/g, name);
+      }
+    })();
+
+    /* -----------------------
+       Confetti canvas
+       simple confetti particles
+       ----------------------- */
+    (function confettiModule(){
+      const canvas = document.getElementById('confetti');
+      const ctx = canvas.getContext('2d');
+      let W = canvas.width = innerWidth;
+      let H = canvas.height = innerHeight;
+      const particles = [];
+      const colors = ["#ff6b6b","#ffd93d","#7ef9a6","#4ecdc4","#c084fc","#ffb86b"];
+
+      window.addEventListener('resize', () => {
+        W = canvas.width = innerWidth;
+        H = canvas.height = innerHeight;
+      });
+
+      function rand(min, max){ return Math.random()*(max-min)+min; }
+
+      function createBurst(x, y, count=80){
+        for(let i=0;i<count;i++){
+          particles.push({
+            x: x + rand(-10,10),
+            y: y + rand(-10,10),
+            vx: rand(-7,7),
+            vy: rand(-12,-2),
+            r: rand(6,12),
+            color: colors[Math.floor(rand(0,colors.length))],
+            rot: rand(0,360),
+            rotSpeed: rand(-8,8),
+            gravity: 0.35 + Math.random()*0.25,
+            life: 0,
+            ttl: 140 + Math.random()*80
+          });
+        }
+      }
+
+      function update(){
+        ctx.clearRect(0,0,W,H);
+        for(let i = particles.length-1; i>=0; i--){
+          const p = particles[i];
+          p.vy += p.gravity * 0.98;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.rotSpeed;
+          p.life++;
+          const alpha = 1 - p.life / p.ttl;
+          if(alpha <= 0 || p.y > H + 50){
+            particles.splice(i,1);
+            continue;
+          }
+          ctx.save();
+          ctx.globalAlpha = Math.max(0,alpha);
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot * Math.PI/180);
+          // rectangle confetti
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.r/2, -p.r/2, p.r, p.r*0.6);
+          ctx.restore();
+        }
+        requestAnimationFrame(update);
+      }
+      update();
+
+      // expose burst function
+      window.confettiBurst = function(x,y){
+        createBurst(x,y);
+      };
+    })();
+
+    /* -----------------------
+       Play button + audio + confetti trigger
+       ----------------------- */
+    (function main(){
+      const btn = document.getElementById('playBtn');
+      const status = document.getElementById('status');
+      const audio = document.getElementById('bgAudio');
+
+      let played = false;
+
+      function startParty(){
+        if(played) return;
+        played = true;
+        status.innerText = "Party started! 🎊 Enjoy!";
+        // try to play audio; browsers may require user gesture (we have it)
+        const playPromise = audio.play();
+        // trigger confetti bursts around card
+        const rect = document.getElementById('card').getBoundingClientRect();
+        const cx = rect.left + rect.width/2;
+        const cy = rect.top + rect.height/3;
+        // 3 bursts
+        window.confettiBurst(cx, cy);
+        setTimeout(()=>window.confettiBurst(cx-120, cy+10), 420);
+        setTimeout(()=>window.confettiBurst(cx+120, cy+10), 760);
+
+        // animate badge flip (tiny fun)
+        const badge = document.querySelector('.badge');
+        badge.animate([
+          { transform: 'rotate(-9deg) scale(1)'},
+          { transform: 'rotate(-18deg) scale(1.06)'},
+          { transform: 'rotate(-9deg) scale(1)'}
+        ], { duration: 800, easing: 'cubic-bezier(.2,.9,.3,1)'});
+      }
+
+      btn.addEventListener('click', startParty);
+
+      // try autoplay fallback: on some devices, clicking anywhere on page should also start
+      document.addEventListener('click', (e)=>{
+        // if not clicked the play button, but user tapped elsewhere, still start
+        if(!played){
+          const target = e.target;
+          if(target.id !== 'playBtn' && target.tagName !== 'A'){
+            startParty();
+          }
+        }
+      });
+
+      // optional: if audio can't be found, change text
+      audio.addEventListener('error', ()=>{
+        // silent audio fallback
+        status.innerText = "No audio found — press PLAY to see animation.";
+      });
+    })();
+
+    /* -----------------------
+       Small accessibility tweak:
+       allow keyboard 'Enter' on the button
+       ----------------------- */
+    document.getElementById('playBtn').setAttribute('tabindex','0');
+    document.getElementById('playBtn').addEventListener('keydown', function(e){
+      if(e.key === 'Enter') this.click();
+    });
+  </script>
+</body>
+</html>
